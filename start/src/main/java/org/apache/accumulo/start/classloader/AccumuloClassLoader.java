@@ -52,7 +52,7 @@ public class AccumuloClassLoader {
   /* @formatter:off */
   public static final String ACCUMULO_CLASSPATH_VALUE =
       "$ACCUMULO_CONF_DIR,\n" +
-          "$ACCUMULO_HOME/lib/[^.].*.jar,\n" +
+          "$ACCUMULO_LIB_DIR/[^.].*.jar,\n" +
           "$ZOOKEEPER_HOME/zookeeper[^.].*.jar,\n" +
           "$HADOOP_CONF_DIR,\n" +
           "$HADOOP_PREFIX/[^.].*.jar,\n" +
@@ -93,9 +93,6 @@ public class AccumuloClassLoader {
     if (System.getenv("ACCUMULO_CONF_DIR") != null) {
       // accumulo conf dir should be set
       SITE_CONF = System.getenv("ACCUMULO_CONF_DIR") + "/" + configFile;
-    } else if (System.getenv("ACCUMULO_HOME") != null) {
-      // if no accumulo conf dir, try accumulo home default
-      SITE_CONF = System.getenv("ACCUMULO_HOME") + "/conf/" + configFile;
     } else {
       SITE_CONF = null;
     }

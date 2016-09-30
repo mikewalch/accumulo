@@ -126,12 +126,12 @@ ${mvnProjBaseDir}
 
     <value>
       <!-- Accumulo requirements -->
-      $ACCUMULO_HOME/lib/accumulo-server.jar,
-      $ACCUMULO_HOME/lib/accumulo-core.jar,
-      $ACCUMULO_HOME/lib/accumulo-start.jar,
-      $ACCUMULO_HOME/lib/accumulo-fate.jar,
-      $ACCUMULO_HOME/lib/accumulo-proxy.jar,
-      $ACCUMULO_HOME/lib/[^.].*.jar,
+      $ACCUMULO_LIB_DIR/accumulo-server.jar,
+      $ACCUMULO_LIB_DIR/accumulo-core.jar,
+      $ACCUMULO_LIB_DIR/accumulo-start.jar,
+      $ACCUMULO_LIB_DIR/accumulo-fate.jar,
+      $ACCUMULO_LIB_DIR/accumulo-proxy.jar,
+      $ACCUMULO_LIB_DIR/[^.].*.jar,
       <!-- ZooKeeper requirements -->
       $ZOOKEEPER_HOME/zookeeper[^.].*.jar,
       <!-- Common Hadoop requirements -->

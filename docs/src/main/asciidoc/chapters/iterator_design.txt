@@ -37,8 +37,8 @@ pitfalls.
 
 To invoke an Accumulo Iterator inside of the TabletServer, the Iterator class must be on the classpath of every
 TabletServer. For production environments, it is common to place a JAR file which contains the Iterator in
-`$ACCUMULO_HOME/lib`.  In development environments, it is convenient to instead place the JAR file in
-`$ACCUMULO_HOME/lib/ext` as JAR files in this directory are dynamically reloaded by the TabletServers alleviating the
+`$ACCUMULO_LIB_DIR`.  In development environments, it is convenient to instead place the JAR file in
+`$ACCUMULO_LIB_DIR/ext` as JAR files in this directory are dynamically reloaded by the TabletServers alleviating the
 need to restart Accumulo while testing an Iterator. Advanced classloader features which enable other types of
 filesystems and per-table classpath configurations (as opposed to process-wide classpaths). These features
 are not covered here, but elsewhere in the user manual.

@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * SystemClassLoader that loads JVM classes
  *       ^
  *       |
- * AccumuloClassLoader loads jars from locations in general.classpaths. Usually the URLs for HADOOP_HOME, ZOOKEEPER_HOME, ACCUMULO_HOME and their associated directories
+ * AccumuloClassLoader loads jars from locations in general.classpaths. Usually the URLs for HADOOP_HOME, ZOOKEEPER_HOME, ACCUMULO_LIB_DIR and their associated directories
  *       ^
  *       |
  * VFSClassLoader that loads jars from locations in general.vfs.classpaths.  Can be used to load accumulo jar from HDFS
@@ -84,7 +84,7 @@ public class AccumuloVFSClassLoader {
 
   public static final String DYNAMIC_CLASSPATH_PROPERTY_NAME = "general.dynamic.classpaths";
 
-  public static final String DEFAULT_DYNAMIC_CLASSPATH_VALUE = "$ACCUMULO_HOME/lib/ext/[^.].*.jar";
+  public static final String DEFAULT_DYNAMIC_CLASSPATH_VALUE = "$ACCUMULO_LIB_DIR/ext/[^.].*.jar";
 
   public static final String VFS_CLASSLOADER_SYSTEM_CLASSPATH_PROPERTY = "general.vfs.classpaths";
 

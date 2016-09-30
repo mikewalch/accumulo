@@ -748,6 +748,11 @@ public class Initialize implements KeywordExecutable {
   }
 
   @Override
+  public String description() {
+    return "Initializes Accumulo";
+  }
+
+  @Override
   public void execute(final String[] args) {
     Opts opts = new Opts();
     opts.parseArgs(Initialize.class.getName(), args);
