@@ -46,18 +46,18 @@ Source your `~/.bashrc` for the changes to take effect and verify:
 ## Configuring
 
 Accumulo has some optional native code that improves its performance and
-stability.  Before configuring Accumulo, attempt to build this native code
+stability. Before configuring Accumulo, attempt to build this native code
 with the following command.
 
     accumulo build-native
 
 If the command fails, its OK to continue with setup and resolve the issue later.
 
-Run the command below to create configuration files for Accumulo in `conf/`:
+Run the command below to create configuration for Accumulo in `conf/`:
 
     accumulo create-config
 
-The script will ask you questions about your set up.  Below are some suggestions:
+The script will ask you questions about your set up. Below are some suggestions:
 
 * When the script asks about memory-map type, choose Native if the build native script 
   was successful. Otherwise, choose Java.
@@ -66,9 +66,9 @@ The script will ask you questions about your set up.  Below are some suggestions
   processes like Hadoop, Zookeeper, and the Accumulo client code.  If Accumulo
   worker processes are swapped out and unresponsive, they may be killed.
 
-After the `config` command is run, the `conf/` directory will contain `accumulo-env.sh`,
-`accumulo-site.xml`, and few a additional files. These files require a few edits before
-starting Accumulo.
+After the `create-config` command is run, the `conf/` directory will contain
+`accumulo-env.sh`, `accumulo-site.xml`, and few a additional files. These files require
+a few edits before starting Accumulo.
 
 ### Secret
 
