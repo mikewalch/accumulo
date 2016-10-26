@@ -53,7 +53,7 @@ with the following command.
 
 If the command fails, its OK to continue with setup and resolve the issue later.
 
-Run the command below to create configuration for Accumulo in `conf/`:
+Run the command below to create configuration files for Accumulo in `conf/`:
 
     accumulo create-config
 
