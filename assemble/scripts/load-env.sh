@@ -68,7 +68,7 @@ fi
 
 if [[ ! -f $ACCUMULO_CONF_DIR/accumulo-env.sh || ! -f $ACCUMULO_CONF_DIR/accumulo-site.xml ]]; then
   echo "The configuration files 'accumulo-env.sh' & 'accumulo-site.xml' must exist in $ACCUMULO_CONF_DIR"
-  echo "Run 'accumulo config' to create them or copy them from $ACCUMULO_CONF_DIR/examples"
+  echo "Run 'accumulo create-config' to create them or copy them from $ACCUMULO_CONF_DIR/examples"
   echo "Follow the instructions in INSTALL.md to edit them for your environment."
   exit 1
 fi
@@ -77,13 +77,13 @@ source "$ACCUMULO_CONF_DIR/accumulo-env.sh"
 
 ## Variables that must be set
 
-: "${ACCUMULO_TSERVER_OPTS:?"ACCUMULO_TSERVER_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_MASTER_OPTS:?"ACCUMULO_MASTER_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_MONITOR_OPTS:?"ACCUMULO_MONITOR_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_GC_OPTS:?"ACCUMULO_GC_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_SHELL_OPTS:?"ACCUMULO_SHELL_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_GENERAL_OPTS:?"ACCUMULO_GENERAL_OPTS is not set in accumulo-env.sh"}"
-: "${ACCUMULO_OTHER_OPTS:?"ACCUMULO_OTHER_OPTS is not set in accumulo-env.sh"}"
+: "${ACCUMULO_TSERVER_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_MASTER_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_MONITOR_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_GC_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_SHELL_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_GENERAL_OPTS:?"variable is not set in accumulo-env.sh"}"
+: "${ACCUMULO_OTHER_OPTS:?"variable is not set in accumulo-env.sh"}"
 
 ### Variables that are derived
 
@@ -117,7 +117,7 @@ verify_env_dir "ACCUMULO_PID_DIR" "${ACCUMULO_PID_DIR}"
 verify_env_dir "ACCUMULO_OPT_DIR" "${ACCUMULO_OPT_DIR}"
 
 ## Verify Zookeeper installation
-ZOOKEEPER_VERSION=$(find -L $ZOOKEEPER_HOME -maxdepth 1 -name "zookeeper-[0-9]*.jar" | head -1)
+ZOOKEEPER_VERSION=$(find -L "$ZOOKEEPER_HOME" -maxdepth 1 -name "zookeeper-[0-9]*.jar" | head -1)
 if [ -z "$ZOOKEEPER_VERSION" ]; then
   echo "A Zookeeper JAR was not found in $ZOOKEEPER_HOME."
   echo "Please check ZOOKEEPER_HOME, either globally or in accumulo-env.sh."

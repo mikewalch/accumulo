@@ -16,17 +16,19 @@
 # limitations under the License.
 
 function print_usage {
-  echo "Usage: cluster.sh <command> (<argument> ...)"
-  echo
-  echo "Commands:"
-  echo "  start-all                       Starts all services on cluster"
-  echo "  start-tservers                  Starts all tservers on cluster"
-  echo "  start-here                      Starts all services on this node"
-  echo "  start-service <host> <service>  Starts <service> on <host>"
-  echo "  stop-all                        Stops all services on cluster"
-  echo "  stop-tservers                   Stops all tservers on cluster"
-  echo "  stop-here                       Stops all services on this node"
-  echo
+  cat <<EOF
+Usage: cluster.sh <command> (<argument> ...)
+
+Commands:
+  start-all [--notTservers]       Starts all services on cluster
+  start-tservers                  Starts all tservers on cluster
+  start-here                      Starts all services on this node
+  start-service <host> <service>  Starts <service> on <host>
+  stop-all                        Stops all services on cluster
+  stop-tservers                   Stops all tservers on cluster
+  stop-here                       Stops all services on this node
+
+EOF
   exit 1
 }
 
@@ -36,23 +38,25 @@ function invalid_args {
   exit 1
 }
 
-function start_service() {
-  HOST="$1"
-  SERVICE="$2"
+function get_ip() {
+  net_cmd=/sbin/ifconfig
+  [[ ! -x $net_cmd ]] && net_cmd='/bin/netstat -ie'
 
-  IFCONFIG=/sbin/ifconfig
-  [[ ! -x $IFCONFIG ]] && IFCONFIG='/bin/netstat -ie'
-
-  IP=$($IFCONFIG 2>/dev/null| grep "inet[^6]" | awk '{print $2}' | sed 's/addr://' | grep -v 0.0.0.0 | grep -v 127.0.0.1 | head -n 1)
+  ip_addr=$($net_cmd 2>/dev/null| grep "inet[^6]" | awk '{print $2}' | sed 's/addr://' | grep -v 0.0.0.0 | grep -v 127.0.0.1 | head -n 1)
   if [[ $? != 0 ]] ; then
-     IP=$(python -c 'import socket as s; print s.gethostbyname(s.getfqdn())')
+     ip_addr=$(python -c 'import socket as s; print s.gethostbyname(s.getfqdn())')
   fi
+  echo "$ip_addr"
+}
 
-  if [[ $HOST == "localhost" || $HOST == $(hostname -f) || $HOST == $(hostname -s) || $HOST == $IP ]]; then
-     "$scripts/service.sh" start "$HOST" "$SERVICE"
+function start_service() {
+  host="$1"
+  service="$2"
+
+  if [[ $host == "localhost" || $host == $(hostname -f) || $host == $(hostname -s) || $host == $(get_ip) ]]; then
+     "$scripts/service.sh" start "$host" "$service"
   else
-     # Ensure that the provided configuration directory is sent with the command
-     echo $($SSH $HOST "bash -c 'ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR} $scripts/service.sh start \"$HOST\" \"$SERVICE\"'")
+     $SSH "$host" "bash -c 'ACCUMULO_CONF_DIR=${ACCUMULO_CONF_DIR} $scripts/service.sh start \"$host\" \"$service\"'"
   fi
 }
 
@@ -61,7 +65,7 @@ function start_tservers() {
   count=1
   for server in $(egrep -v '(^#|^\s*$)' "${ACCUMULO_CONF_DIR}/tservers"); do
      echo -n "."
-     start_service $server tserver &
+     start_service "$server" tserver &
      if (( ++count % 72 == 0 )) ;
      then
         echo
@@ -74,7 +78,7 @@ function start_tservers() {
 function start_all() {
   unset DISPLAY
 
-  start_service $monitor monitor 
+  start_service "$monitor" monitor 
 
   if [ "$1" != "--notTservers" ]; then
      start_tservers
@@ -82,28 +86,21 @@ function start_all() {
 
   ${accumulo_cmd} org.apache.accumulo.master.state.SetGoalState NORMAL
   for master in $(egrep -v '(^#|^\s*$)' "$ACCUMULO_CONF_DIR/masters"); do
-     start_service $master master
+     start_service "$master" master
   done
 
   for gc in $(egrep -v '(^#|^\s*$)' "$ACCUMULO_CONF_DIR/gc"); do
-     start_service $gc gc
+     start_service "$gc" gc
   done
 
   for tracer in $(egrep -v '(^#|^\s*$)' "$ACCUMULO_CONF_DIR/tracers"); do
-     start_service $tracer tracer
+     start_service "$tracer" tracer
   done
 }
 
 function start_here() {
-  IFCONFIG=/sbin/ifconfig
-  [[ ! -x $IFCONFIG ]] && IFCONFIG='/bin/netstat -ie'
 
-  IP=$($IFCONFIG 2>/dev/null| grep "inet[^6]" | awk '{print $2}' | sed 's/addr://' | grep -v 0.0.0.0 | grep -v 127.0.0.1 | head -n 1)
-  if [[ $? != 0 ]]; then
-     IP=$(python -c 'import socket as s; print s.gethostbyname(s.getfqdn())')
-  fi
-
-  local_hosts="$(hostname -a 2> /dev/null) $(hostname) localhost 127.0.0.1 $IP"
+  local_hosts="$(hostname -a 2> /dev/null) $(hostname) localhost 127.0.0.1 $(get_ip)"
   for host in $local_hosts; do
      if grep -q "^${host}\$" "$ACCUMULO_CONF_DIR/tservers"; then
         start_service "$host" tserver
@@ -142,24 +139,15 @@ function start_here() {
 }
 
 function stop_service() {
-  HOST="$1"
-  SERVICE="$2"
-  SIGNAL="$3"
-
-  IFCONFIG=/sbin/ifconfig
-  [[ ! -x $IFCONFIG ]] && IFCONFIG='/bin/netstat -ie'
-
-  START_JAR="${ACCUMULO_LIB_DIR}/accumulo-start.jar"
-  IP=$($IFCONFIG 2>/dev/null| grep "inet[^6]" | awk '{print $START_JAR}' | sed 's/addr://' | grep -v 0.0.0.0 | grep -v 127.0.0.1 | head -n 1)
-  if [[ $? != 0 ]]; then
-    IP=$(python -c 'import socket as s; print s.gethostbyname(s.getfqdn())')
-  fi
+  host="$1"
+  service="$2"
+  signal="$3"
 
   # only stop if there's not one already running
-  if [[ $HOST == localhost || $HOST = "$(hostname -s)" || $HOST = "$(hostname -f)" || $HOST = "$IP" ]] ; then
-    "$scripts/service.sh" stop "$HOST" "$SERVICE" "$SIGNAL"
+  if [[ $host == localhost || $host = "$(hostname -s)" || $host = "$(hostname -f)" || $host = $(get_ip) ]] ; then
+    "$scripts/service.sh" stop "$host" "$service" "$signal"
   else
-    echo $($SSH $HOST "bash -c '$scripts/service.sh stop \"$HOST\" \"$SERVICE\" \"$SIGNAL\"'")
+    $SSH "$host" "bash -c '$scripts/service.sh stop \"$host\" \"$service\" \"$signal\"'"
   fi
 }
 
@@ -169,7 +157,7 @@ function stop_tservers() {
   echo "Stopping unresponsive tablet servers (if any)..."
   for server in ${tserver_hosts}; do
      # only start if there's not one already running
-     stop_service $server tserver TERM & 
+     stop_service "$server" tserver TERM & 
   done
 
   sleep 10
@@ -177,7 +165,7 @@ function stop_tservers() {
   echo "Stopping unresponsive tablet servers hard (if any)..."
   for server in ${tserver_hosts}; do
      # only start if there's not one already running
-     stop_service $server tserver KILL & 
+     stop_service "$server" tserver KILL & 
   done
 
   echo "Cleaning tablet server entries from zookeeper"
@@ -186,9 +174,8 @@ function stop_tservers() {
 
 function stop_all() {
   echo "Stopping accumulo services..."
-  ${accumulo_cmd} admin "$@" stopAll
-
-  if [[ $? != 0 ]]; then
+  if ! ${accumulo_cmd} admin stopAll
+  then
      echo "Invalid password or unable to connect to the master"
      echo "Initiating forced shutdown in 15 seconds (Ctrl-C to abort)"
      sleep 10
@@ -317,7 +304,7 @@ function main() {
 
   case "$1" in
     start-all)
-      start_all
+      start_all "${*:2}"
       ;;
     start-tservers)
       start_tservers

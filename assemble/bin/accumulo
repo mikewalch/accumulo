@@ -31,9 +31,8 @@ function build_native() {
   TMP_DIR=$(mktemp -d /tmp/accumulo-native.XXXX) || exit 1
 
   # Unpack the tarball to our temp directory
-  tar xf "${native_tarball}" -C "${TMP_DIR}"
-
-  if [[ $? != 0 ]]; then
+  if ! tar xf "${native_tarball}" -C "${TMP_DIR}"
+  then
       echo "Failed to unpack native tarball to ${TMP_DIR}"
       exit 1
   fi
@@ -45,10 +44,8 @@ function build_native() {
 
   # Make the native library
   export USERFLAGS="$@"
-  make
-
-  # Make sure it didn't fail
-  if [[ $? != 0 ]]; then
+  if ! make
+  then
       echo "Make failed!"
       exit 1
   fi
@@ -78,27 +75,25 @@ function main() {
   export ACCUMULO_CONF_DIR="${ACCUMULO_CONF_DIR:-$basedir/conf}"
   export ACCUMULO_LIB_DIR="${ACCUMULO_LIB_DIR:-$basedir/lib}"
 
-  if [[ "$1" == "config" ]]; then
+  if [[ "$1" == "create-config" ]]; then
     "${ACCUMULO_LIB_DIR}/scripts/config.sh" ${*:2}
     exit 0
-  elif [[ "$1" == "native" ]]; then
-    build_native
+  elif [[ "$1" == "build-native" ]]; then
+    build_native ${*:2}
     exit 0
   fi
 
   source "${ACCUMULO_LIB_DIR}"/scripts/load-env.sh
 
-  DEFAULT_GENERAL_JAVA_OPTS=""
-
   # ACCUMULO_XTRAJARS is where all of the commandline -add items go into for reading by accumulo.
   # It also holds the JAR run with the jar command and, if possible, any items in the JAR manifest's Class-Path.
-  if [ "$1" = "-add" ] ; then
+  if [[ "$1" = "-add" ]]; then
       export ACCUMULO_XTRAJARS="$2"
       shift 2
   else
       export ACCUMULO_XTRAJARS=""
   fi
-  if [ "$1" = "jar" -a -f "$2" ] ; then
+  if [[ "$1" = "jar" && -f "$2" ]]; then
       if [[ $2 =~ ^/ ]]; then
         jardir="$(dirname "$2")"
         jarfile="$2"
@@ -142,7 +137,7 @@ function main() {
 
   # The `find` command could fail for environmental reasons or bad configuration
   # Avoid trying to run Accumulo when we can't find the jar
-  if [ -z "${LOG4J_JAR}" -a -z "${CLASSPATH}" ]; then
+  if [[ -z "${LOG4J_JAR}" && -z "${CLASSPATH}" ]]; then
      echo "Could not locate Log4j jar in Hadoop installation at ${HADOOP_PREFIX}"
      exit 1
   fi

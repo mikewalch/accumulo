@@ -16,12 +16,14 @@
 # limitations under the License.
 
 function print_usage {
-  echo "Usage: service.sh <command> (<argument> ...)"
-  echo
-  echo "Commands:"
-  echo "  start <host> <service>            Starts <service> on local <host>"
-  echo "  stop <host> <service> <signal>    Stops <service> using <signal> on local <host>"
-  echo
+  cat <<EOF
+Usage: service.sh <command> (<argument> ...)
+
+Commands:
+  start <host> <service>            Starts <service> on local <host>
+  stop <host> <service> <signal>    Stops <service> using <signal> on local <host>
+
+EOF
   exit 1
 }
 
@@ -58,18 +60,18 @@ function start_service() {
   host="$1"
   service="$2"
 
-  ADDRESS=$host
+  address=$host
   loghost=$host
 
   # When the hostname provided is the alias/shortname, try to use the FQDN to make
   # sure we send the right address to the Accumulo process.
   if [[ "$host" = "$(hostname -s)" ]]; then
      host="$(hostname -f)"
-     ADDRESS="$host"
+     address="$host"
   fi
 
   if [[ ${service} == "monitor" && ${ACCUMULO_MONITOR_BIND_ALL} == "true" ]]; then
-     ADDRESS="0.0.0.0"
+     address="0.0.0.0"
   fi
 
   COMMAND="${ACCUMULO_BIN_DIR}/accumulo"
@@ -118,7 +120,7 @@ function start_service() {
      fi
 
      # Fork the process, store the pid
-     nohup ${NUMA_CMD} "$COMMAND" "${service}" --address "${ADDRESS}" >"$OUTFILE" 2>"$ERRFILE" < /dev/null &
+     nohup ${NUMA_CMD} "$COMMAND" "${service}" --address "${address}" >"$OUTFILE" 2>"$ERRFILE" < /dev/null &
      echo $! > ${PID_FILE}
 
   else
@@ -162,7 +164,7 @@ function start_service() {
         rotate_log "$ERRFILE" ${ACCUMULO_NUM_OUT_FILES}
 
         # Fork the process, store the pid
-        nohup ${NUMA_CMD} "$COMMAND" "${service}" --address "${ADDRESS}" >"$OUTFILE" 2>"$ERRFILE" < /dev/null &
+        nohup ${NUMA_CMD} "$COMMAND" "${service}" --address "${address}" >"$OUTFILE" 2>"$ERRFILE" < /dev/null &
         echo $! > ${PID_FILE}
 
      done

@@ -162,15 +162,15 @@ in the JVM by causing it to pause much less frequently.
 ===== Building
 
 32-bit and 64-bit Linux and Mac OS X versions of the native map can be built
-from the Accumulo bin package by executing +accumulo native+. If your system's
+from the Accumulo bin package by executing +accumulo build-native+. If your system's
 default compiler options are insufficient, you can add additional compiler
 options to the command line, such as options for the architecture. These will be
 passed to the Makefile in the environment variable +USERFLAGS+.
 
 Examples:
 
-  accumulo native
-  accumulo native -m32
+  accumulo build-native
+  accumulo build-native -m32
 
 After building the native map from the source, you will find the artifact in
 +$ACCUMULO_LIB_DIR/native+. Upon starting up, the tablet server will look

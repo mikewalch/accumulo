@@ -16,13 +16,15 @@
 # limitations under the License.
 
 function print_usage {
-  echo "Usage: accumulo-cluster <command> (<argument> ...)"
-  echo
-  echo "Commands:"
-  echo "  config    Creates cluster config"
-  echo "  start     Starts Accumulo cluster"
-  echo "  stop      Stops Accumulo cluster"
-  echo
+  cat <<EOF
+Usage: accumulo-cluster <command> (<argument> ...)
+
+Commands:
+  create-config   Creates cluster config
+  start           Starts Accumulo cluster
+  stop            Stops Accumulo cluster
+
+EOF
   exit 1
 }
 
@@ -47,9 +49,13 @@ function verify_file {
 }
 
 function copy_file {
-  verify_file $1
-  verify_dir $2
-  cp $1 $2  
+  verify_file "$1"
+  verify_dir "$2"
+  if ! cp "$1" "$2"
+  then
+    echo "Failed to copy file '$1' to '$2'"
+    exit 1
+  fi
 }
 
 function main() {
@@ -75,12 +81,12 @@ function main() {
   verify_file "${ACCUMULO_LIB_DIR}/scripts/cluster.sh"
 
   case "$1" in
-    config)
-      copy_file ${ACCUMULO_CONF_DIR}/examples/gc ${ACCUMULO_CONF_DIR}
-      copy_file ${ACCUMULO_CONF_DIR}/examples/masters ${ACCUMULO_CONF_DIR}
-      copy_file ${ACCUMULO_CONF_DIR}/examples/monitor ${ACCUMULO_CONF_DIR}
-      copy_file ${ACCUMULO_CONF_DIR}/examples/tservers ${ACCUMULO_CONF_DIR}
-      copy_file ${ACCUMULO_CONF_DIR}/examples/tracers ${ACCUMULO_CONF_DIR}
+    create-config)
+      copy_file "${ACCUMULO_CONF_DIR}/examples/gc" "${ACCUMULO_CONF_DIR}"
+      copy_file "${ACCUMULO_CONF_DIR}/examples/masters" "${ACCUMULO_CONF_DIR}"
+      copy_file "${ACCUMULO_CONF_DIR}/examples/monitor" "${ACCUMULO_CONF_DIR}"
+      copy_file "${ACCUMULO_CONF_DIR}/examples/tservers" "${ACCUMULO_CONF_DIR}"
+      copy_file "${ACCUMULO_CONF_DIR}/examples/tracers" "${ACCUMULO_CONF_DIR}"
       ;;
     start)
       "${ACCUMULO_LIB_DIR}"/scripts/cluster.sh start-all

@@ -16,19 +16,22 @@
 # limitations under the License.
 
 function print_usage {
-  echo "Usage: accumulo-service <service> <command>"
-  echo
-  echo "Services:"
-  echo "  gc          Accumulo garbage collector"
-  echo "  monitor     Accumulo monitor"
-  echo "  master      Accumulo master"
-  echo "  tserver     Accumulo tserver"
-  echo "  tracer      Accumulo tracter"
-  echo
-  echo "Commands:"
-  echo "  start       Start service"
-  echo "  stop        Stop service"
-  echo "  kill        Kill service"
+  cat <<EOF
+Usage: accumulo-service <service> <command>
+
+Services:
+  gc          Accumulo garbage collector
+  monitor     Accumulo monitor
+  master      Accumulo master
+  tserver     Accumulo tserver
+  tracer      Accumulo tracter
+
+Commands:
+  start       Start service
+  stop        Stop service
+  kill        Kill service
+
+EOF
   exit 1
 }
 
@@ -79,13 +82,13 @@ function main() {
       fi
       case "$2" in 
         start)
-          "${ACCUMULO_LIB_DIR}/scripts/service.sh" start "`get_host`" "$1"
+          "${ACCUMULO_LIB_DIR}/scripts/service.sh" start "$(get_host)" "$1"
           ;;
         stop)
-          "${ACCUMULO_LIB_DIR}/scripts/service.sh" stop "`get_host`" "$service" TERM
+          "${ACCUMULO_LIB_DIR}/scripts/service.sh" stop "$(get_host)" "$service" TERM
           ;;
         kill)
-          "${ACCUMULO_LIB_DIR}/scripts/service.sh" stop "`get_host`" "$service" KILL
+          "${ACCUMULO_LIB_DIR}/scripts/service.sh" stop "$(get_host)" "$service" KILL
           ;;
         *)
           invalid_args "'$2' is an invalid <command>"

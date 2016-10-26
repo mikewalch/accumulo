@@ -49,13 +49,13 @@ Accumulo has some optional native code that improves its performance and
 stability.  Before configuring Accumulo, attempt to build this native code
 with the following command.
 
-    accumulo native
+    accumulo build-native
 
 If the command fails, its OK to continue with setup and resolve the issue later.
 
-Run the command below to create some default configuration for Accumulo in `conf/`:
+Run the command below to create configuration for Accumulo in `conf/`:
 
-    accumulo config
+    accumulo create-config
 
 The script will ask you questions about your set up.  Below are some suggestions:
 
@@ -119,7 +119,8 @@ The initialization command will prompt for the following information.
 There are two primary methods for running Accumulo:
 
 1. Run individual Accumulo services using `accumulo-service`. Useful if you are
-   using a cluster management tool (i.e Ansible, Salt, etc) to start Accumulo.
+   using a cluster management tool (i.e Ansible, Salt, etc) or init.d scripts to
+   start Accumulo.
 
 2. Run an Accumulo cluster on one or more nodes using `accumulo-cluster`. Useful for
    local development and testing or if you are not using a cluster management tool
@@ -138,7 +139,7 @@ Start Accumulo services (tserver, master, monitor, etc) using command below:
 Before using the `accumulo-cluster` script, additional configuration files need
 to be created. Use the command below to create them:
 
-    accumulo-cluster config
+    accumulo-cluster create-config
 
 This creates five files (`masters`, `gc`, `monitor`, `tservers`, & `tracers`)
 in the `conf/` directory that contain the node names where Accumulo services
