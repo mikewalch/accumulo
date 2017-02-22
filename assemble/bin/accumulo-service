@@ -89,12 +89,6 @@ function start_service() {
   rotate_log "$outfile"
   rotate_log "$errfile"
 
-  export ACCUMULO_MONITOR_BIND_ALL=${ACCUMULO_MONITOR_BIND_ALL:-"true"}
-  extra_args=""
-  if [[ $service == "monitor" && $ACCUMULO_MONITOR_BIND_ALL == "true" ]]; then
-    extra_args=('--address' '0.0.0.0')
-  fi
-
   nohup "${bin}/accumulo" "$service" "${extra_args[@]}" >"$outfile" 2>"$errfile" < /dev/null &
   echo "$!" > "${pid_file}"
 
