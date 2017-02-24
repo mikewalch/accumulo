@@ -33,8 +33,6 @@ export HADOOP_PREFIX="${HADOOP_PREFIX:-/path/to/hadoop}"
 export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-${HADOOP_PREFIX}/etc/hadoop}"
 ## Zookeeper installation
 export ZOOKEEPER_HOME="${ZOOKEEPER_HOME:-/path/to/zookeeper}"
-## See HADOOP-7154 and ACCUMULO-847
-export MALLOC_ARENA_MAX=${MALLOC_ARENA_MAX:-1}
 
 ##################################################################
 # Build JAVA_OPTS variable. Defaults below work but can be edited.
@@ -56,7 +54,7 @@ shell)   JAVA_OPTS=("${JAVA_OPTS[@]}" ${shellHigh_shellLow}) ;;
 esac
 
 ## JVM options set for logging
-JAVA_OPTS=("${JAVA_OPTS[@]}" "-Daccumulo.application=${ACCUMULO_CMD}" "-Daccumulo.log.dir=${ACCUMULO_LOG_DIR}" "-Daccumulo.local.hostname=$(hostname -s)")
+JAVA_OPTS=("${JAVA_OPTS[@]}" "-Daccumulo.application=${ACCUMULO_CMD}" "-Daccumulo.log.dir=${ACCUMULO_LOG_DIR}" "-Daccumulo.local.hostname=$(hostname -f)")
 case "$ACCUMULO_CMD" in
 monitor)                    JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-monitor.properties") ;;
 gc|master|tserver|tracer)   JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-service.properties") ;;

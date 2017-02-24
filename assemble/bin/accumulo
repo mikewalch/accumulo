@@ -67,10 +67,11 @@ function main() {
   verify_env_dir "HADOOP_PREFIX" "${HADOOP_PREFIX}"
   verify_env_dir "HADOOP_CONF_DIR" "${HADOOP_CONF_DIR}"
   verify_env_dir "ZOOKEEPER_HOME" "${ZOOKEEPER_HOME}"
-  : "${MALLOC_ARENA_MAX:?"variable is not set in accumulo-env.sh"}"
 
   export HADOOP_HOME=$HADOOP_PREFIX
   export HADOOP_HOME_WARN_SUPPRESS=true
+  # See HADOOP-7154 and ACCUMULO-847
+  export MALLOC_ARENA_MAX=${MALLOC_ARENA_MAX:-1}
 
   if [ -f "${conf}/jaas.conf" ]; then
     export JAVA_OPTS=("${JAVA_OPTS[@]}" "-Djava.security.auth.login.config=${conf}/jaas.conf")
