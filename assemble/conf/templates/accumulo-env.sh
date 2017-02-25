@@ -39,9 +39,14 @@ export ZOOKEEPER_HOME="${ZOOKEEPER_HOME:-/path/to/zookeeper}"
 ##################################################################
 
 ## JVM options set for all processes. Extra options can be passed in by setting ACCUMULO_JAVA_OPTS to an array of options.
-JAVA_OPTS=("${ACCUMULO_JAVA_OPTS[@]}" '-XX:+UseConcMarkSweepGC' '-XX:CMSInitiatingOccupancyFraction=75' '-XX:+CMSClassUnloadingEnabled'
-'-XX:OnOutOfMemoryError=kill -9 %p' '-XX:-OmitStackTraceInFastThrow' '-Djava.net.preferIPv4Stack=true' 
-'-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl')
+JAVA_OPTS=("${ACCUMULO_JAVA_OPTS[@]}"
+  '-XX:+UseConcMarkSweepGC'
+  '-XX:CMSInitiatingOccupancyFraction=75'
+  '-XX:+CMSClassUnloadingEnabled'
+  '-XX:OnOutOfMemoryError=kill -9 %p'
+  '-XX:-OmitStackTraceInFastThrow'
+  '-Djava.net.preferIPv4Stack=true'
+  '-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl')
 
 ## JVM options set for individual applications
 case "$ACCUMULO_CMD" in
@@ -54,14 +59,34 @@ shell)   JAVA_OPTS=("${JAVA_OPTS[@]}" ${shellHigh_shellLow}) ;;
 esac
 
 ## JVM options set for logging
-JAVA_OPTS=("${JAVA_OPTS[@]}" "-Daccumulo.application=${ACCUMULO_CMD}" "-Daccumulo.log.dir=${ACCUMULO_LOG_DIR}" "-Daccumulo.local.hostname=$(hostname -f)")
+JAVA_OPTS=("${JAVA_OPTS[@]}"
+  "-Daccumulo.application=${ACCUMULO_CMD}${ACCUMULO_SERVICE_INSTANCE}_$(hostname)"
+  "-Daccumulo.log.dir=${ACCUMULO_LOG_DIR}")
+
 case "$ACCUMULO_CMD" in
-monitor)                    JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-monitor.properties") ;;
-gc|master|tserver|tracer)   JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-service.properties") ;;
-*)                          JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j.properties") ;;
+  monitor)
+    JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-monitor.properties")
+    ;;
+  gc|master|tserver|tracer)
+    JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j-service.properties")
+    ;;
+  *)
+    JAVA_OPTS=("${JAVA_OPTS[@]}" "-Dlog4j.configuration=file:${ACCUMULO_CONF_DIR}/log4j.properties")
+    ;;
 esac
 
 export JAVA_OPTS
+
+## External class path items for Java system class loader (dependencies not included with Accumulo)
+CLASSPATH="$(find "$ZOOKEEPER_HOME"/{,lib} "$HADOOP_PREFIX"/share/hadoop/{common,common/lib,hdfs,mapreduce,yarn} -maxdepth 1 -name '*.jar' \
+  -and -not -name '*slf4j*' \
+  -and -not -name '*fatjar*' \
+  -and -not -name '*-javadoc*' \
+  -and -not -name '*-sources*.jar' \
+  -and -not -name '*-test*.jar' \
+  -print0 | tr '\0' ':')$CLASSPATH"
+CLASSPATH="${HADOOP_CONF_DIR}:${CLASSPATH}"
+export CLASSPATH
 
 ###############################################
 # Variables that are optional. Uncomment to set
