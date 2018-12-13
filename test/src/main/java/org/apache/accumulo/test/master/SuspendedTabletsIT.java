@@ -42,7 +42,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.clientImpl.ClientContext;
 import org.apache.accumulo.core.clientImpl.MasterClient;
 import org.apache.accumulo.core.conf.ClientProperty;
@@ -168,16 +167,14 @@ public class SuspendedTabletsIT extends ConfigurableMacBase {
 
     String tableName = getUniqueNames(1)[0];
 
-    AccumuloClient client = ctx.getClient();
-
     // Create a table with a bunch of splits
     log.info("Creating table " + tableName);
-    client.tableOperations().create(tableName);
+    ctx.tableOperations().create(tableName);
     SortedSet<Text> splitPoints = new TreeSet<>();
     for (int i = 1; i < TABLETS; ++i) {
       splitPoints.add(new Text("" + i));
     }
-    client.tableOperations().addSplits(tableName, splitPoints);
+    ctx.tableOperations().addSplits(tableName, splitPoints);
 
     // Wait for all of the tablets to hosted ...
     log.info("Waiting on hosting and balance");
@@ -188,7 +185,7 @@ public class SuspendedTabletsIT extends ConfigurableMacBase {
     }
 
     // ... and balanced.
-    client.instanceOperations().waitForBalance();
+    ctx.instanceOperations().waitForBalance();
     do {
       // Give at least another 5 seconds for migrations to finish up
       Thread.sleep(5000);
@@ -313,7 +310,7 @@ public class SuspendedTabletsIT extends ConfigurableMacBase {
     }
 
     private void scan(ClientContext ctx, String tableName) throws Exception {
-      Map<String,String> idMap = ctx.getClient().tableOperations().tableIdMap();
+      Map<String,String> idMap = ctx.tableOperations().tableIdMap();
       String tableId = Objects.requireNonNull(idMap.get(tableName));
       try (MetaDataTableScanner scanner = new MetaDataTableScanner(ctx, new Range())) {
         while (scanner.hasNext()) {

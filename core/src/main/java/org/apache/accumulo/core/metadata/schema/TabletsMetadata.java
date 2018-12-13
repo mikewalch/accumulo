@@ -78,7 +78,7 @@ public class TabletsMetadata implements Iterable<TabletMetadata>, AutoCloseable 
 
     @Override
     public TabletsMetadata build(ClientContext ctx) {
-      return build(ctx.getClient());
+      return build(ctx);
     }
 
     @Override
