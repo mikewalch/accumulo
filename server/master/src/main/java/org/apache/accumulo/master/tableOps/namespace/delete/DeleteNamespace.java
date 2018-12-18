@@ -39,7 +39,7 @@ public class DeleteNamespace extends MasterRepo {
   }
 
   @Override
-  public Repo<Master> call(long tid, Master environment) throws Exception {
+  public Repo<Master> call(long tid, Master environment) {
     environment.getEventCoordinator().event("deleting namespace %s ", namespaceId);
     return new NamespaceCleanUp(namespaceId);
   }

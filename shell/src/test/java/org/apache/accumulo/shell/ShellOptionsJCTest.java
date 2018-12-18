@@ -36,7 +36,7 @@ public class ShellOptionsJCTest {
   }
 
   @Test
-  public void testSasl() throws Exception {
+  public void testSasl() {
     JCommander jc = new JCommander();
 
     jc.setProgramName("accumulo shell");
@@ -47,7 +47,7 @@ public class ShellOptionsJCTest {
   }
 
   @Test
-  public void testTraceHosts() throws Exception {
+  public void testTraceHosts() {
     // Set the zk hosts in the client conf directly for tracing
     final String zk = "localhost:45454";
     JCommander jc = new JCommander();

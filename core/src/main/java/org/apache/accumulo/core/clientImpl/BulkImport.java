@@ -261,7 +261,7 @@ public class BulkImport implements ImportDestinationArguments, ImportMappingOpti
 
   public interface KeyExtentCache {
     KeyExtent lookup(Text row)
-        throws IOException, AccumuloException, AccumuloSecurityException, TableNotFoundException;
+        throws AccumuloException, AccumuloSecurityException, TableNotFoundException;
   }
 
   public static List<KeyExtent> findOverlappingTablets(ClientContext context,

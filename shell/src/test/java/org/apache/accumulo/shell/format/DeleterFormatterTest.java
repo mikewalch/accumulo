@@ -64,7 +64,7 @@ public class DeleterFormatterTest {
     ByteArrayInputStream bais;
 
     @Override
-    public int read() throws IOException {
+    public int read() {
       return bais.read();
     }
 

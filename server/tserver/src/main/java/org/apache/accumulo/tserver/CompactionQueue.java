@@ -72,7 +72,7 @@ class CompactionQueue extends AbstractQueue<TraceRunnable> implements BlockingQu
   }
 
   @Override
-  public synchronized void put(TraceRunnable e) throws InterruptedException {
+  public synchronized void put(TraceRunnable e) {
     task.add(e);
     notify();
   }

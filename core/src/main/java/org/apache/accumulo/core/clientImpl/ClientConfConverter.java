@@ -166,19 +166,14 @@ public class ClientConfConverter {
         if (property.isSensitive()) {
           org.apache.hadoop.conf.Configuration hadoopConf = getHadoopConfiguration();
           if (null != hadoopConf) {
-            try {
-              char[] value = CredentialProviderFactoryShim
-                  .getValueFromCredentialProvider(hadoopConf, key);
-              if (null != value) {
-                log.trace("Loaded sensitive value for {} from CredentialProvider", key);
-                return new String(value);
-              } else {
-                log.trace("Tried to load sensitive value for {} from CredentialProvider, "
-                    + "but none was found", key);
-              }
-            } catch (IOException e) {
-              log.warn("Failed to extract sensitive property ({}) from Hadoop CredentialProvider,"
-                  + " falling back to base AccumuloConfiguration", key, e);
+            char[] value = CredentialProviderFactoryShim
+                .getValueFromCredentialProvider(hadoopConf, key);
+            if (null != value) {
+              log.trace("Loaded sensitive value for {} from CredentialProvider", key);
+              return new String(value);
+            } else {
+              log.trace("Tried to load sensitive value for {} from CredentialProvider, "
+                  + "but none was found", key);
             }
           }
         }
@@ -232,23 +227,18 @@ public class ClientConfConverter {
         // Attempt to load sensitive properties from a CredentialProvider, if configured
         org.apache.hadoop.conf.Configuration hadoopConf = getHadoopConfiguration();
         if (null != hadoopConf) {
-          try {
-            for (String key : CredentialProviderFactoryShim.getKeys(hadoopConf)) {
-              if (!Property.isValidPropertyKey(key) || !Property.isSensitive(key)) {
-                continue;
-              }
+          for (String key : CredentialProviderFactoryShim.getKeys(hadoopConf)) {
+            if (!Property.isValidPropertyKey(key) || !Property.isSensitive(key)) {
+              continue;
+            }
 
-              if (filter.test(key)) {
-                char[] value = CredentialProviderFactoryShim
-                    .getValueFromCredentialProvider(hadoopConf, key);
-                if (null != value) {
-                  props.put(key, new String(value));
-                }
+            if (filter.test(key)) {
+              char[] value = CredentialProviderFactoryShim
+                  .getValueFromCredentialProvider(hadoopConf, key);
+              if (null != value) {
+                props.put(key, new String(value));
               }
             }
-          } catch (IOException e) {
-            log.warn("Failed to extract sensitive properties from Hadoop CredentialProvider, "
-                + "falling back to accumulo.properties", e);
           }
         }
       }

@@ -31,8 +31,7 @@ public class DeleteShellIterCommand extends Command {
   private Option nameOpt, allOpt, profileOpt;
 
   @Override
-  public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws Exception {
+  public int execute(final String fullCommand, final CommandLine cl, final Shell shellState) {
 
     String profile = cl.getOptionValue(profileOpt.getOpt());
     if (shellState.iteratorProfiles.containsKey(profile)) {

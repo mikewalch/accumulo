@@ -297,7 +297,7 @@ public class DfsLogger implements Comparable<DfsLogger> {
     }
 
     @Override
-    public void await() throws IOException {
+    public void await() {
       return;
     }
   }
@@ -343,7 +343,7 @@ public class DfsLogger implements Comparable<DfsLogger> {
   }
 
   public DfsLogger(ServerContext context, ServerResources conf, AtomicLong syncCounter,
-      AtomicLong flushCounter) throws IOException {
+      AtomicLong flushCounter) {
     this(context, conf);
     this.syncCounter = syncCounter;
     this.flushCounter = flushCounter;
@@ -355,8 +355,7 @@ public class DfsLogger implements Comparable<DfsLogger> {
    * @param meta
    *          the cq for the "log" entry in +r/!0
    */
-  public DfsLogger(ServerContext context, ServerResources conf, String filename, String meta)
-      throws IOException {
+  public DfsLogger(ServerContext context, ServerResources conf, String filename, String meta) {
     this(context, conf);
     this.logPath = filename;
     metaReference = meta;

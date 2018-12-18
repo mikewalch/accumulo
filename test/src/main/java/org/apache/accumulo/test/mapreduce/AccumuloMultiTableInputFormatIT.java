@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +55,7 @@ public class AccumuloMultiTableInputFormatIT extends AccumuloClusterHarness {
       int count = 0;
 
       @Override
-      protected void map(Key k, Value v, Context context) throws IOException, InterruptedException {
+      protected void map(Key k, Value v, Context context) {
         try {
           String tableName = ((RangeInputSplit) context.getInputSplit()).getTableName();
           if (key != null)
@@ -71,7 +70,7 @@ public class AccumuloMultiTableInputFormatIT extends AccumuloClusterHarness {
       }
 
       @Override
-      protected void cleanup(Context context) throws IOException, InterruptedException {
+      protected void cleanup(Context context) {
         try {
           assertEquals(100, count);
         } catch (AssertionError e) {

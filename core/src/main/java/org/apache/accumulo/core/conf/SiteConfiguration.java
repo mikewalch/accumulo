@@ -206,16 +206,12 @@ public class SiteConfiguration extends AccumuloConfiguration {
     org.apache.hadoop.conf.Configuration hadoopConf = getHadoopConfiguration();
     if (null != hadoopConf) {
       // Try to find the sensitive value from the CredentialProvider
-      try {
-        char[] value = CredentialProviderFactoryShim.getValueFromCredentialProvider(hadoopConf,
-            property.getKey());
-        if (null != value) {
-          return new String(value);
-        }
-      } catch (IOException e) {
-        log.warn("Failed to extract sensitive property (" + property.getKey()
-            + ") from Hadoop CredentialProvider, falling back to accumulo.properties", e);
+      char[] value = CredentialProviderFactoryShim.getValueFromCredentialProvider(hadoopConf,
+          property.getKey());
+      if (null != value) {
+        return new String(value);
       }
+
     }
     return null;
   }
@@ -250,23 +246,18 @@ public class SiteConfiguration extends AccumuloConfiguration {
     // CredentialProvider should take precedence over site
     org.apache.hadoop.conf.Configuration hadoopConf = getHadoopConfiguration();
     if (null != hadoopConf) {
-      try {
-        for (String key : CredentialProviderFactoryShim.getKeys(hadoopConf)) {
-          if (!Property.isValidPropertyKey(key) || !Property.isSensitive(key)) {
-            continue;
-          }
+      for (String key : CredentialProviderFactoryShim.getKeys(hadoopConf)) {
+        if (!Property.isValidPropertyKey(key) || !Property.isSensitive(key)) {
+          continue;
+        }
 
-          if (filter.test(key)) {
-            char[] value = CredentialProviderFactoryShim.getValueFromCredentialProvider(hadoopConf,
-                key);
-            if (null != value) {
-              props.put(key, new String(value));
-            }
+        if (filter.test(key)) {
+          char[] value = CredentialProviderFactoryShim.getValueFromCredentialProvider(hadoopConf,
+              key);
+          if (null != value) {
+            props.put(key, new String(value));
           }
         }
-      } catch (IOException e) {
-        log.warn("Failed to extract sensitive properties from Hadoop"
-            + " CredentialProvider, falling back to accumulo.properties", e);
       }
     }
     if (overrides != null) {

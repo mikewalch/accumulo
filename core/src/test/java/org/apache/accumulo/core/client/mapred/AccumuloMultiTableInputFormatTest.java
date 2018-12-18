@@ -42,7 +42,7 @@ public class AccumuloMultiTableInputFormatTest {
    * Verify {@link InputTableConfig} objects get correctly serialized in the JobContext.
    */
   @Test
-  public void testTableQueryConfigSerialization() throws IOException {
+  public void testTableQueryConfigSerialization() {
     String table1Name = testName.getMethodName() + "1";
     String table2Name = testName.getMethodName() + "2";
     JobConf job = new JobConf();

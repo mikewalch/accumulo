@@ -41,7 +41,7 @@ class FinishCancelCompaction extends MasterRepo {
   }
 
   @Override
-  public void undo(long tid, Master environment) throws Exception {
+  public void undo(long tid, Master environment) {
 
   }
 }

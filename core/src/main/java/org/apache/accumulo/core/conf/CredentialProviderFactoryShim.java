@@ -352,8 +352,7 @@ public class CredentialProviderFactoryShim {
    * @throws IOException
    *           On errors reading a CredentialProvider
    */
-  public static char[] getValueFromCredentialProvider(Configuration conf, String alias)
-      throws IOException {
+  public static char[] getValueFromCredentialProvider(Configuration conf, String alias) {
     requireNonNull(conf);
     requireNonNull(alias);
 
@@ -376,7 +375,7 @@ public class CredentialProviderFactoryShim {
    * @throws IOException
    *           On errors reading a CredentialProvider
    */
-  public static List<String> getKeys(Configuration conf) throws IOException {
+  public static List<String> getKeys(Configuration conf) {
     requireNonNull(conf);
 
     if (isHadoopCredentialProviderAvailable()) {
@@ -435,7 +434,7 @@ public class CredentialProviderFactoryShim {
    *          The credential to store
    */
   public static void createEntryInProvider(Object credentialProvider, String name,
-      char[] credential) throws IOException {
+      char[] credential) {
     requireNonNull(credentialProvider);
     requireNonNull(name);
     requireNonNull(credential);

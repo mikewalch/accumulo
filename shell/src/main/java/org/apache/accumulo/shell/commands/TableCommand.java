@@ -19,8 +19,6 @@ package org.apache.accumulo.shell.commands;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.shell.Shell;
 import org.apache.accumulo.shell.Shell.Command;
@@ -30,7 +28,7 @@ import org.apache.commons.cli.CommandLine;
 public class TableCommand extends Command {
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws AccumuloException, AccumuloSecurityException, TableNotFoundException {
+      throws TableNotFoundException {
     final String tableName = cl.getArgs()[0];
     if (!shellState.getAccumuloClient().tableOperations().exists(tableName)) {
       throw new TableNotFoundException(null, tableName, null);

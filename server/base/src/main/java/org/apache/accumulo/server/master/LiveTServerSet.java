@@ -72,7 +72,7 @@ public class LiveTServerSet implements Watcher {
   public class TServerConnection {
     private final HostAndPort address;
 
-    public TServerConnection(HostAndPort addr) throws TException {
+    public TServerConnection(HostAndPort addr) {
       address = addr;
     }
 

@@ -63,8 +63,7 @@ public class ConfiguratorBaseTest {
   }
 
   @Test
-  public void testSetConnectorInfoClassOfQConfigurationStringString()
-      throws AccumuloSecurityException {
+  public void testSetConnectorInfoClassOfQConfigurationStringString() {
     Configuration conf = new Configuration();
     assertFalse(ConfiguratorBase.isConnectorInfoSet(this.getClass(), conf));
     ConfiguratorBase.setConnectorInfo(this.getClass(), conf, "testUser",

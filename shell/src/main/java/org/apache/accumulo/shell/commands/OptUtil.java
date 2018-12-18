@@ -16,8 +16,6 @@
  */
 package org.apache.accumulo.shell.commands;
 
-import java.io.UnsupportedEncodingException;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.NamespaceNotFoundException;
@@ -133,7 +131,7 @@ public abstract class OptUtil {
     return o;
   }
 
-  public static Text getStartRow(final CommandLine cl) throws UnsupportedEncodingException {
+  public static Text getStartRow(final CommandLine cl) {
     if (cl.hasOption(START_ROW_OPT)) {
       return new Text(cl.getOptionValue(START_ROW_OPT).getBytes(Shell.CHARSET));
     } else {
@@ -141,7 +139,7 @@ public abstract class OptUtil {
     }
   }
 
-  public static Text getEndRow(final CommandLine cl) throws UnsupportedEncodingException {
+  public static Text getEndRow(final CommandLine cl) {
     if (cl.hasOption(END_ROW_OPT)) {
       return new Text(cl.getOptionValue(END_ROW_OPT).getBytes(Shell.CHARSET));
     } else {

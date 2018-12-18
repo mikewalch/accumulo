@@ -58,7 +58,7 @@ public class InsecurePermHandler implements PermissionHandler {
 
   @Override
   public boolean hasTablePermission(String user, String table, TablePermission permission)
-      throws AccumuloSecurityException, TableNotFoundException {
+      throws TableNotFoundException {
     return true;
   }
 
@@ -99,7 +99,7 @@ public class InsecurePermHandler implements PermissionHandler {
 
   @Override
   public boolean hasNamespacePermission(String user, Namespace.ID namespace,
-      NamespacePermission permission) throws AccumuloSecurityException, NamespaceNotFoundException {
+      NamespacePermission permission) throws NamespaceNotFoundException {
     return true;
   }
 

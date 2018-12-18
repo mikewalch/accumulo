@@ -195,7 +195,7 @@ public class MiniAccumuloClusterControl implements ClusterControl {
   }
 
   @Override
-  public synchronized void stop(ServerType server, String hostname) throws IOException {
+  public synchronized void stop(ServerType server, String hostname) {
     switch (server) {
       case MASTER:
         if (null != masterProcess) {
@@ -286,17 +286,17 @@ public class MiniAccumuloClusterControl implements ClusterControl {
   }
 
   @Override
-  public void signal(ServerType server, String hostname, String signal) throws IOException {
+  public void signal(ServerType server, String hostname, String signal) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void suspend(ServerType server, String hostname) throws IOException {
+  public void suspend(ServerType server, String hostname) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void resume(ServerType server, String hostname) throws IOException {
+  public void resume(ServerType server, String hostname) {
     throw new UnsupportedOperationException();
   }
 

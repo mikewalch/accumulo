@@ -193,28 +193,23 @@ public class SecurityOperation {
       if (isKerberos) {
         // If we have kerberos credentials for a user from the network but no account
         // in the system, we need to make one before proceeding
-        try {
-          if (!authenticator.userExists(creds.getPrincipal())) {
-            // If we call the normal createUser method, it will loop back into this method
-            // when it tries to check if the user has permission to create users
-            try {
-              _createUser(credentials, creds, Authorizations.EMPTY);
-            } catch (ThriftSecurityException e) {
-              if (SecurityErrorCode.USER_EXISTS != e.getCode()) {
-                // For Kerberos, a user acct is automatically created because there is no notion of
-                // a password
-                // in the traditional sense of Accumulo users. As such, if a user acct already
-                // exists when we
-                // try to automatically create a user account, we should avoid returning this
-                // exception back to the user.
-                // We want to let USER_EXISTS code pass through and continue
-                throw e;
-              }
+        if (!authenticator.userExists(creds.getPrincipal())) {
+          // If we call the normal createUser method, it will loop back into this method
+          // when it tries to check if the user has permission to create users
+          try {
+            _createUser(credentials, creds, Authorizations.EMPTY);
+          } catch (ThriftSecurityException e) {
+            if (SecurityErrorCode.USER_EXISTS != e.getCode()) {
+              // For Kerberos, a user acct is automatically created because there is no notion of
+              // a password
+              // in the traditional sense of Accumulo users. As such, if a user acct already
+              // exists when we
+              // try to automatically create a user account, we should avoid returning this
+              // exception back to the user.
+              // We want to let USER_EXISTS code pass through and continue
+              throw e;
             }
           }
-        } catch (AccumuloSecurityException e) {
-          log.debug("Failed to determine if user exists", e);
-          throw e.asThriftException();
         }
       }
 
@@ -278,11 +273,7 @@ public class SecurityOperation {
       throw new ThriftSecurityException(credentials.getPrincipal(),
           SecurityErrorCode.PERMISSION_DENIED);
 
-    try {
-      return authorizor.getCachedUserAuthorizations(user);
-    } catch (AccumuloSecurityException e) {
-      throw e.asThriftException();
-    }
+    return authorizor.getCachedUserAuthorizations(user);
   }
 
   public Authorizations getUserAuthorizations(TCredentials credentials)
@@ -441,12 +432,8 @@ public class SecurityOperation {
   private void targetUserExists(String user) throws ThriftSecurityException {
     if (user.equals(getRootUsername()))
       return;
-    try {
-      if (!authenticator.userExists(user))
-        throw new ThriftSecurityException(user, SecurityErrorCode.USER_DOESNT_EXIST);
-    } catch (AccumuloSecurityException e) {
-      throw e.asThriftException();
-    }
+    if (!authenticator.userExists(user))
+      throw new ThriftSecurityException(user, SecurityErrorCode.USER_DOESNT_EXIST);
   }
 
   public boolean canScan(TCredentials credentials, Table.ID tableId, Namespace.ID namespaceId)
@@ -872,11 +859,7 @@ public class SecurityOperation {
 
   public Set<String> listUsers(TCredentials credentials) throws ThriftSecurityException {
     authenticate(credentials);
-    try {
-      return authenticator.listUsers();
-    } catch (AccumuloSecurityException e) {
-      throw e.asThriftException();
-    }
+    return authenticator.listUsers();
   }
 
   public void deleteTable(TCredentials credentials, Table.ID tableId, Namespace.ID namespaceId)

@@ -127,12 +127,8 @@ public class DistributedReadWriteLock implements java.util.concurrent.locks.Read
     @Override
     public void lock() {
       while (true) {
-        try {
-          if (tryLock(1, TimeUnit.DAYS))
-            return;
-        } catch (InterruptedException ex) {
-          // ignored
-        }
+        if (tryLock(1, TimeUnit.DAYS))
+          return;
       }
     }
 
@@ -164,7 +160,7 @@ public class DistributedReadWriteLock implements java.util.concurrent.locks.Read
     }
 
     @Override
-    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+    public boolean tryLock(long time, TimeUnit unit) {
       long now = System.currentTimeMillis();
       long returnTime = now + TimeUnit.MILLISECONDS.convert(time, unit);
       while (returnTime > now) {

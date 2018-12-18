@@ -94,8 +94,7 @@ public class ConcurrentKeyExtentCacheTest {
       KeyExtent extent = tc.lookup(lookupRow);
       assertTrue(extent.contains(lookupRow));
       assertTrue(extentsSet.contains(extent));
-    } catch (IOException | AccumuloException | AccumuloSecurityException
-        | TableNotFoundException e) {
+    } catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
       throw new RuntimeException(e);
     }
   }
@@ -118,7 +117,7 @@ public class ConcurrentKeyExtentCacheTest {
   }
 
   @Test
-  public void testRandom() throws Exception {
+  public void testRandom() {
     TestCache tc = new TestCache();
 
     Random rand = new SecureRandom();

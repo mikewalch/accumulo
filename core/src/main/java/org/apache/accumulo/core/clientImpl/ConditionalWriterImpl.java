@@ -678,7 +678,7 @@ class ConditionalWriterImpl implements ConditionalWriter {
    * to finish... unless this exceeds timeout.
    */
   private void invalidateSession(SessionID sessionId, HostAndPort location)
-      throws AccumuloException, AccumuloSecurityException, TableNotFoundException {
+      throws AccumuloException {
 
     long sleepTime = 50;
 

@@ -110,8 +110,7 @@ public class BulkImporter {
     this.setTime = setTime;
   }
 
-  public AssignmentStats importFiles(List<String> files, Path failureDir) throws IOException,
-      AccumuloException, AccumuloSecurityException, ThriftTableOperationException {
+  public AssignmentStats importFiles(List<String> files, Path failureDir) throws IOException {
 
     int numThreads = context.getConfiguration().getCount(Property.TSERV_BULK_PROCESS_THREADS);
     int numAssignThreads = context.getConfiguration()

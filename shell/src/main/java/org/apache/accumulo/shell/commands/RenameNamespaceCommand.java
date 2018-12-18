@@ -24,7 +24,6 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.NamespaceExistsException;
 import org.apache.accumulo.core.client.NamespaceNotFoundException;
-import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.clientImpl.Namespaces;
@@ -39,7 +38,7 @@ public class RenameNamespaceCommand extends Command {
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
       throws AccumuloException, AccumuloSecurityException, TableNotFoundException,
-      TableExistsException, NamespaceNotFoundException, NamespaceExistsException {
+      NamespaceNotFoundException, NamespaceExistsException {
     String old = cl.getArgs()[0];
     String newer = cl.getArgs()[1];
     boolean resetContext = false;

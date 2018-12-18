@@ -100,7 +100,7 @@ public class PasswordConverterTest {
   }
 
   @Test(expected = ParameterException.class)
-  public void testNoFile() throws FileNotFoundException {
+  public void testNoFile() {
     argv[1] = "file:doesnotexist";
     new JCommander(password).parse(argv);
   }

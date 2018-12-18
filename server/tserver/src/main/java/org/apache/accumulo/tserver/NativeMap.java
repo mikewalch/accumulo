@@ -708,7 +708,7 @@ public class NativeMap implements Iterable<Map.Entry<Key,Value>> {
     }
 
     @Override
-    public void next() throws IOException {
+    public void next() {
 
       if (entry == null)
         throw new IllegalStateException();
@@ -760,7 +760,7 @@ public class NativeMap implements Iterable<Map.Entry<Key,Value>> {
 
     @Override
     public void init(SortedKeyValueIterator<Key,Value> source, Map<String,String> options,
-        IteratorEnvironment env) throws IOException {
+        IteratorEnvironment env) {
       throw new UnsupportedOperationException();
     }
 

@@ -256,7 +256,7 @@ public final class BCFile {
        *
        * @return the number of uncompressed bytes written through the BlockAppender so far.
        */
-      public long getRawSize() throws IOException {
+      public long getRawSize() {
         return size() & 0x00000000ffffffffL;
       }
 

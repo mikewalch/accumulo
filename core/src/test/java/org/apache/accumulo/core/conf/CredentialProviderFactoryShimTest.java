@@ -148,7 +148,7 @@ public class CredentialProviderFactoryShimTest {
   }
 
   @Test
-  public void testConfigurationCreation() throws IOException {
+  public void testConfigurationCreation() {
     final String path = "jceks://file/tmp/foo.jks";
     final Configuration actualConf = CredentialProviderFactoryShim.getConfiguration(path);
     assertNotNull(actualConf);

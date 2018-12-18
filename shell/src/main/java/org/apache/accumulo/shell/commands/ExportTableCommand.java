@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.shell.Shell;
 import org.apache.accumulo.shell.Shell.Command;
@@ -37,8 +36,7 @@ public class ExportTableCommand extends Command {
 
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws AccumuloException, AccumuloSecurityException, TableNotFoundException,
-      TableExistsException {
+      throws AccumuloException, AccumuloSecurityException, TableNotFoundException {
 
     final String tableName = OptUtil.getTableOpt(cl, shellState);
 

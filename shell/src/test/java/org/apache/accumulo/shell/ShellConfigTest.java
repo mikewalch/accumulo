@@ -42,7 +42,7 @@ public class ShellConfigTest {
     StringBuilder sb = new StringBuilder();
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(int b) {
       sb.append((char) (0xff & b));
     }
 
@@ -75,7 +75,7 @@ public class ShellConfigTest {
   }
 
   @After
-  public void teardown() throws Exception {
+  public void teardown() {
     shell.shutdown();
     output.clear();
     System.setOut(out);

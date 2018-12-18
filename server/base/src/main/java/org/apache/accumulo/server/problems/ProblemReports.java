@@ -118,7 +118,7 @@ public class ProblemReports implements Iterable<ProblemReport> {
 
   }
 
-  public void printProblems() throws Exception {
+  public void printProblems() {
     for (ProblemReport pr : this) {
       System.out.println(pr.getTableId() + " " + pr.getProblemType() + " " + pr.getResource() + " "
           + pr.getException());

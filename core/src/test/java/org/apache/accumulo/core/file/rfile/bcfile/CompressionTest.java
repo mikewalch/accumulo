@@ -158,7 +158,7 @@ public class CompressionTest {
   // don't start until we have created the codec
   @Test(timeout = 60 * 1000)
   public void testManyDontStartUntilThread()
-      throws IOException, InterruptedException, ExecutionException {
+      throws InterruptedException, ExecutionException {
 
     for (final Algorithm al : Algorithm.values()) {
       if (isSupported.get(al) != null && isSupported.get(al)) {
@@ -194,7 +194,7 @@ public class CompressionTest {
   }
 
   @Test(timeout = 60 * 1000)
-  public void testThereCanBeOnlyOne() throws IOException, InterruptedException, ExecutionException {
+  public void testThereCanBeOnlyOne() throws InterruptedException, ExecutionException {
 
     for (final Algorithm al : Algorithm.values()) {
       if (isSupported.get(al) != null && isSupported.get(al)) {

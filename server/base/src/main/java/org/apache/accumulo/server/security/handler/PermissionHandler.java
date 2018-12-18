@@ -68,7 +68,7 @@ public interface PermissionHandler {
    * Used to get the table permission of a user for a table
    */
   boolean hasTablePermission(String user, String table, TablePermission permission)
-      throws AccumuloSecurityException, TableNotFoundException;
+      throws TableNotFoundException;
 
   /**
    * Used to get the table permission of a user for a table, with caching. This method is for high
@@ -81,7 +81,7 @@ public interface PermissionHandler {
    * Used to get the namespace permission of a user for a namespace
    */
   boolean hasNamespacePermission(String user, Namespace.ID namespace,
-      NamespacePermission permission) throws AccumuloSecurityException, NamespaceNotFoundException;
+      NamespacePermission permission) throws NamespaceNotFoundException;
 
   /**
    * Used to get the namespace permission of a user for a namespace, with caching. This method is

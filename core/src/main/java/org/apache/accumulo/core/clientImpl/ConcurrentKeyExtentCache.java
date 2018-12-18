@@ -83,15 +83,14 @@ class ConcurrentKeyExtentCache implements KeyExtentCache {
   }
 
   @VisibleForTesting
-  protected Stream<KeyExtent> lookupExtents(Text row)
-      throws TableNotFoundException, AccumuloException, AccumuloSecurityException {
+  protected Stream<KeyExtent> lookupExtents(Text row) {
     return TabletsMetadata.builder().forTable(tableId).overlapping(row, null).checkConsistency()
         .fetchPrev().build(ctx).stream().limit(100).map(TabletMetadata::getExtent);
   }
 
   @Override
   public KeyExtent lookup(Text row)
-      throws IOException, AccumuloException, AccumuloSecurityException, TableNotFoundException {
+      throws AccumuloException, AccumuloSecurityException, TableNotFoundException {
     while (true) {
       KeyExtent ke = getFromCache(row);
       if (ke != null)

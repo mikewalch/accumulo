@@ -45,17 +45,17 @@ public class DelegationTokenStub implements AuthenticationToken {
   }
 
   @Override
-  public void write(DataOutput out) throws IOException {
+  public void write(DataOutput out) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void readFields(DataInput in) throws IOException {
+  public void readFields(DataInput in) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void destroy() throws DestroyFailedException {
+  public void destroy() {
     throw new UnsupportedOperationException();
   }
 

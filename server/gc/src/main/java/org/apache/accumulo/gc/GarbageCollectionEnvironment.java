@@ -53,7 +53,7 @@ public interface GarbageCollectionEnvironment {
    * @return true if the results are short due to insufficient memory, otherwise false
    */
   boolean getCandidates(String continuePoint, List<String> candidates)
-      throws TableNotFoundException, AccumuloException, AccumuloSecurityException;
+      throws TableNotFoundException;
 
   /**
    * Fetch a list of paths for all bulk loads in progress (blip) from a given table,
@@ -61,8 +61,7 @@ public interface GarbageCollectionEnvironment {
    *
    * @return The list of files for each bulk load currently in progress.
    */
-  Iterator<String> getBlipIterator()
-      throws TableNotFoundException, AccumuloException, AccumuloSecurityException;
+  Iterator<String> getBlipIterator() throws TableNotFoundException;
 
   static class Reference {
     public final ID id;

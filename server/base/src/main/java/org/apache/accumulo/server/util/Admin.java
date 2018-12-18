@@ -396,16 +396,11 @@ public class Admin implements KeywordExecutable {
    */
   static String qualifyWithZooKeeperSessionId(String zTServerRoot, ZooCache zooCache,
       String hostAndPort) {
-    try {
-      long sessionId = ZooLock.getSessionId(zooCache, zTServerRoot + "/" + hostAndPort);
-      if (0 == sessionId) {
-        return hostAndPort;
-      }
-      return hostAndPort + "[" + Long.toHexString(sessionId) + "]";
-    } catch (InterruptedException | KeeperException e) {
-      log.warn("Failed to communicate with ZooKeeper to find session ID for TabletServer.");
+    long sessionId = ZooLock.getSessionId(zooCache, zTServerRoot + "/" + hostAndPort);
+    if (0 == sessionId) {
       return hostAndPort;
     }
+    return hostAndPort + "[" + Long.toHexString(sessionId) + "]";
   }
 
   private static final String ACCUMULO_SITE_BACKUP_FILE = "accumulo.properties.bak";
@@ -563,8 +558,7 @@ public class Admin implements KeywordExecutable {
     userWriter.close();
   }
 
-  private void printSystemConfiguration(File outputDirectory)
-      throws IOException, AccumuloException, AccumuloSecurityException {
+  private void printSystemConfiguration(File outputDirectory) throws IOException {
     TreeMap<String,String> conf = new TreeMap<>();
     TreeMap<String,String> site = new TreeMap<>(siteConfig);
     for (Entry<String,String> prop : site.entrySet()) {
@@ -591,8 +585,7 @@ public class Admin implements KeywordExecutable {
   @SuppressFBWarnings(value = "PATH_TRAVERSAL_IN",
       justification = "code runs in same security context as user who provided input")
   private void printTableConfiguration(AccumuloClient accumuloClient, String tableName,
-      File outputDirectory)
-      throws AccumuloException, TableNotFoundException, IOException, AccumuloSecurityException {
+      File outputDirectory) throws AccumuloException, TableNotFoundException, IOException {
     File tableBackup = new File(outputDirectory, tableName + ".cfg");
     FileWriter writer = new FileWriter(tableBackup);
     writer.write(createTableFormat.format(new String[] {tableName}));

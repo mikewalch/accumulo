@@ -34,7 +34,6 @@ import org.apache.accumulo.server.ServerContext;
 import org.apache.accumulo.server.cli.ServerUtilOpts;
 import org.apache.accumulo.server.master.LiveTServerSet;
 import org.apache.accumulo.server.master.LiveTServerSet.Listener;
-import org.apache.accumulo.server.master.state.DistributedStoreException;
 import org.apache.accumulo.server.master.state.MetaDataTableScanner;
 import org.apache.accumulo.server.master.state.TServerInstance;
 import org.apache.accumulo.server.master.state.TabletLocationState;
@@ -72,11 +71,7 @@ public class FindOfflineTablets {
     scanning.set(true);
 
     Iterator<TabletLocationState> zooScanner;
-    try {
-      zooScanner = new ZooTabletStateStore(context).iterator();
-    } catch (DistributedStoreException e) {
-      throw new AccumuloException(e);
-    }
+    zooScanner = new ZooTabletStateStore(context).iterator();
 
     int offline = 0;
 

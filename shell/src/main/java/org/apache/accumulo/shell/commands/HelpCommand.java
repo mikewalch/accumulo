@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.apache.accumulo.shell.Shell;
 import org.apache.accumulo.shell.Shell.Command;
-import org.apache.accumulo.shell.ShellCommandException;
 import org.apache.accumulo.shell.Token;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -36,7 +35,7 @@ public class HelpCommand extends Command {
 
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws ShellCommandException, IOException {
+      throws IOException {
     int numColumns = shellState.getReader().getTerminal().getWidth();
     if (cl.hasOption(noWrapOpt.getOpt())) {
       numColumns = Integer.MAX_VALUE;

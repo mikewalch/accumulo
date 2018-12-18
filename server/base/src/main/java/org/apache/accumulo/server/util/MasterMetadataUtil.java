@@ -147,7 +147,7 @@ public class MasterMetadataUtil {
 
   private static KeyExtent fixSplit(ServerContext context, Table.ID tableId, Text metadataEntry,
       Text metadataPrevEndRow, Value oper, double splitRatio, TServerInstance tserver, String time,
-      long initFlushID, long initCompactID, ZooLock lock) throws AccumuloException, IOException {
+      long initFlushID, long initCompactID, ZooLock lock) throws AccumuloException {
     if (metadataPrevEndRow == null)
       // something is wrong, this should not happen... if a tablet is split, it will always have a
       // prev end row....

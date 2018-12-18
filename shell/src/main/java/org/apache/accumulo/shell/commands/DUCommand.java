@@ -16,7 +16,6 @@
  */
 package org.apache.accumulo.shell.commands;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -40,7 +39,7 @@ public class DUCommand extends Command {
 
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws IOException, TableNotFoundException, NamespaceNotFoundException {
+      throws TableNotFoundException, NamespaceNotFoundException {
 
     final SortedSet<String> tables = new TreeSet<>(Arrays.asList(cl.getArgs()));
 

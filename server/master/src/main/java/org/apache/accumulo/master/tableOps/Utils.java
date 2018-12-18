@@ -154,8 +154,7 @@ public class Utils {
         String.format("%016x", tid));
   }
 
-  private static Lock getLock(ServerContext context, AbstractId id, long tid, boolean writeLock)
-      throws Exception {
+  private static Lock getLock(ServerContext context, AbstractId id, long tid, boolean writeLock) {
     byte[] lockData = String.format("%016x", tid).getBytes(UTF_8);
     ZooQueueLock qlock = new ZooQueueLock(context.getZooReaderWriter(),
         context.getZooKeeperRoot() + Constants.ZTABLE_LOCKS + "/" + id, false);

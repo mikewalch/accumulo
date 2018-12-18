@@ -34,11 +34,7 @@ public class ZookeeperLockChecker implements TabletServerLockChecker {
 
   @Override
   public boolean isLockHeld(String tserver, String session) {
-    try {
-      return ZooLock.getSessionId(zc, root + "/" + tserver) == Long.parseLong(session, 16);
-    } catch (KeeperException | InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    return ZooLock.getSessionId(zc, root + "/" + tserver) == Long.parseLong(session, 16);
   }
 
   @Override

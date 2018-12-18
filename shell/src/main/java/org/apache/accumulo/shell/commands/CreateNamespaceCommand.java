@@ -16,15 +16,12 @@
  */
 package org.apache.accumulo.shell.commands;
 
-import java.io.IOException;
 import java.util.Map.Entry;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.NamespaceExistsException;
 import org.apache.accumulo.core.client.NamespaceNotFoundException;
-import org.apache.accumulo.core.client.TableExistsException;
-import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.shell.Shell;
 import org.apache.accumulo.shell.Shell.Command;
@@ -38,8 +35,7 @@ public class CreateNamespaceCommand extends Command {
 
   @Override
   public int execute(final String fullCommand, final CommandLine cl, final Shell shellState)
-      throws AccumuloException, AccumuloSecurityException, TableExistsException,
-      TableNotFoundException, IOException, ClassNotFoundException, NamespaceExistsException,
+      throws AccumuloException, AccumuloSecurityException, NamespaceExistsException,
       NamespaceNotFoundException {
 
     if (createNamespaceOptCopyConfig == null) {

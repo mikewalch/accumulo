@@ -24,7 +24,6 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.NamespaceNotFoundException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.clientImpl.Namespace;
-import org.apache.accumulo.core.clientImpl.thrift.ThriftSecurityException;
 import org.apache.accumulo.core.security.NamespacePermission;
 import org.apache.accumulo.core.security.SystemPermission;
 import org.apache.accumulo.core.security.TablePermission;
@@ -55,7 +54,7 @@ public class KerberosPermissionHandler implements PermissionHandler {
 
   @Override
   public void initializeSecurity(TCredentials credentials, String rootuser)
-      throws AccumuloSecurityException, ThriftSecurityException {
+      throws AccumuloSecurityException {
     zkPermissionHandler.initializeSecurity(credentials,
         Base64.getEncoder().encodeToString(rootuser.getBytes(UTF_8)));
   }
@@ -76,7 +75,7 @@ public class KerberosPermissionHandler implements PermissionHandler {
 
   @Override
   public boolean hasTablePermission(String user, String table, TablePermission permission)
-      throws AccumuloSecurityException, TableNotFoundException {
+      throws TableNotFoundException {
     return zkPermissionHandler.hasTablePermission(
         Base64.getEncoder().encodeToString(user.getBytes(UTF_8)), table, permission);
   }
@@ -90,7 +89,7 @@ public class KerberosPermissionHandler implements PermissionHandler {
 
   @Override
   public boolean hasNamespacePermission(String user, Namespace.ID namespace,
-      NamespacePermission permission) throws AccumuloSecurityException, NamespaceNotFoundException {
+      NamespacePermission permission) throws NamespaceNotFoundException {
     return zkPermissionHandler.hasNamespacePermission(
         Base64.getEncoder().encodeToString(user.getBytes(UTF_8)), namespace, permission);
   }

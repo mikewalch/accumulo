@@ -83,7 +83,7 @@ public class MiniAccumuloClusterImplTest {
   }
 
   @Test(timeout = 10000)
-  public void testAccurateProcessListReturned() throws Exception {
+  public void testAccurateProcessListReturned() {
     Map<ServerType,Collection<ProcessReference>> procs = accumulo.getProcesses();
 
     assertTrue(procs.containsKey(ServerType.GARBAGE_COLLECTOR));

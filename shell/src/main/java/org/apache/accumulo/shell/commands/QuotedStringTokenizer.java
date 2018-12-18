@@ -18,7 +18,6 @@ package org.apache.accumulo.shell.commands;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -41,18 +40,14 @@ public class QuotedStringTokenizer implements Iterable<String> {
   public QuotedStringTokenizer(final String t) throws BadArgumentException {
     tokens = new ArrayList<>();
     this.input = t;
-    try {
-      createTokens();
-    } catch (UnsupportedEncodingException e) {
-      throw new IllegalArgumentException(e.getMessage());
-    }
+    createTokens();
   }
 
   public String[] getTokens() {
     return tokens.toArray(new String[tokens.size()]);
   }
 
-  private void createTokens() throws BadArgumentException, UnsupportedEncodingException {
+  private void createTokens() throws BadArgumentException {
     boolean inQuote = false;
     boolean inEscapeSequence = false;
     String hexChars = null;

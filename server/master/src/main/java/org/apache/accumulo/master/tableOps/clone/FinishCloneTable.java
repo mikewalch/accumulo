@@ -33,7 +33,7 @@ class FinishCloneTable extends MasterRepo {
   }
 
   @Override
-  public long isReady(long tid, Master environment) throws Exception {
+  public long isReady(long tid, Master environment) {
     return 0;
   }
 
@@ -63,6 +63,6 @@ class FinishCloneTable extends MasterRepo {
   }
 
   @Override
-  public void undo(long tid, Master environment) throws Exception {}
+  public void undo(long tid, Master environment) {}
 
 }

@@ -257,7 +257,7 @@ public class ScanCommand extends Command {
   }
 
   protected void fetchColumns(final CommandLine cl, final ScannerBase scanner,
-      final ScanInterpreter formatter) throws UnsupportedEncodingException {
+      final ScanInterpreter formatter) {
     if (cl.hasOption(scanOptColumns.getOpt())) {
       for (String a : cl.getOptionValue(scanOptColumns.getOpt()).split(",")) {
         final String sa[] = a.split(":", 2);

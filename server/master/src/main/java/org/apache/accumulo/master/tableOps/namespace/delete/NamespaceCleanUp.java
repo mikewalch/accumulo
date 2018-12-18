@@ -40,7 +40,7 @@ class NamespaceCleanUp extends MasterRepo {
   }
 
   @Override
-  public long isReady(long tid, Master master) throws Exception {
+  public long isReady(long tid, Master master) {
     return 0;
   }
 
@@ -71,7 +71,7 @@ class NamespaceCleanUp extends MasterRepo {
   }
 
   @Override
-  public void undo(long tid, Master environment) throws Exception {
+  public void undo(long tid, Master environment) {
     // nothing to do
   }
 

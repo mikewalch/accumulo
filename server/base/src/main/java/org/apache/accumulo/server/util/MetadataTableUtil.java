@@ -290,7 +290,7 @@ public class MetadataTableUtil {
   }
 
   public static SortedMap<FileRef,DataFileValue> getDataFileSizes(KeyExtent extent,
-      ServerContext context) throws IOException {
+      ServerContext context) {
     TreeMap<FileRef,DataFileValue> sizes = new TreeMap<>();
 
     try (Scanner mdScanner = new ScannerImpl(context, MetadataTable.ID, Authorizations.EMPTY)) {
@@ -378,7 +378,7 @@ public class MetadataTableUtil {
   }
 
   public static Mutation createDeleteMutation(ServerContext context, Table.ID tableId,
-      String pathToRemove) throws IOException {
+      String pathToRemove) {
     Path path = context.getVolumeManager().getFullPath(tableId, pathToRemove);
     Mutation delFlag = new Mutation(new Text(MetadataSchema.DeletesSection.getRowPrefix() + path));
     delFlag.put(EMPTY_TEXT, EMPTY_TEXT, new Value(new byte[] {}));
@@ -686,8 +686,7 @@ public class MetadataTableUtil {
     if (extent.isRootTablet()) {
       retryZooKeeperUpdate(context, zooLock, new ZooOperation() {
         @Override
-        public void run(IZooReaderWriter rw)
-            throws KeeperException, InterruptedException, IOException {
+        public void run(IZooReaderWriter rw) throws KeeperException, InterruptedException {
           String root = getZookeeperLogLocation(context);
           for (LogEntry entry : entries) {
             String path = root + "/" + entry.getUniqueID();

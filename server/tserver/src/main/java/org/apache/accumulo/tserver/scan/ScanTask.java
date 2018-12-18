@@ -74,7 +74,7 @@ public abstract class ScanTask<T> implements RunnableFuture<T> {
   }
 
   @Override
-  public T get() throws InterruptedException, ExecutionException {
+  public T get() {
     throw new UnsupportedOperationException();
   }
 

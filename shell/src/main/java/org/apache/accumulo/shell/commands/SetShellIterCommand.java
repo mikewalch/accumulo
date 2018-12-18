@@ -45,8 +45,7 @@ public class SetShellIterCommand extends SetIterCommand {
   @Override
   protected void setTableProperties(final CommandLine cl, final Shell shellState,
       final int priority, final Map<String,String> options, final String classname,
-      final String name) throws AccumuloException, AccumuloSecurityException, ShellCommandException,
-      TableNotFoundException {
+      final String name) {
     // instead of setting table properties, just put the options in a list to use at scan time
 
     String profile = cl.getOptionValue(profileOpt.getOpt());

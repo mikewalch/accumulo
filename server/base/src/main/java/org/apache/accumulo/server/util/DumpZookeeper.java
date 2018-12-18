@@ -108,8 +108,7 @@ public class DumpZookeeper {
     }
   }
 
-  private static Encoded value(String path)
-      throws KeeperException, InterruptedException, UnsupportedEncodingException {
+  private static Encoded value(String path) throws KeeperException, InterruptedException {
     byte[] data = zk.getData(path, null);
     for (int i = 0; i < data.length; i++) {
       // does this look like simple ascii?

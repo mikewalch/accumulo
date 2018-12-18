@@ -33,7 +33,7 @@ import org.junit.Test;
 
 public class AuthenticationTokenTest {
   @Test
-  public void testSerializeDeserializeToken() throws AccumuloSecurityException, IOException {
+  public void testSerializeDeserializeToken() {
     Random random = new SecureRandom();
     byte[] randomBytes = new byte[12];
     random.nextBytes(randomBytes);

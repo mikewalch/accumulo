@@ -63,7 +63,7 @@ public class CancelCompactions extends MasterRepo {
 
     zoo.mutate(zCancelID, null, null, new Mutator() {
       @Override
-      public byte[] mutate(byte[] currentValue) throws Exception {
+      public byte[] mutate(byte[] currentValue) {
         long cid = Long.parseLong(new String(currentValue, UTF_8));
 
         if (cid < flushID)
