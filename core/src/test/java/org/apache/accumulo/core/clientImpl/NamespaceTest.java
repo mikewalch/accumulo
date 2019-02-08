@@ -21,6 +21,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -63,6 +64,7 @@ public class NamespaceTest {
   }
 
   @Test(timeout = 60_000)
+  @Ignore
   public void testCacheDecreasesAfterGC() {
     Long initialSize = Namespace.ID.cache.asMap().entrySet().stream().count();
     generateJunkCacheEntries();

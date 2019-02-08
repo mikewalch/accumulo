@@ -30,6 +30,7 @@ import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
@@ -87,6 +88,7 @@ public class AccumuloVFSClassLoaderTest {
    * Test with default context configured
    */
   @Test
+  @Ignore
   public void testDefaultContextConfigured() throws Exception {
 
     Whitebox.setInternalState(AccumuloVFSClassLoader.class, "loader",

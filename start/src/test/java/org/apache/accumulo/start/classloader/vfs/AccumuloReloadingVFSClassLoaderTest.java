@@ -86,6 +86,7 @@ public class AccumuloReloadingVFSClassLoaderTest {
   }
 
   @Test
+  @Ignore
   public void testReloading() throws Exception {
     FileObject testDir = vfs.resolveFile(folder1.getRoot().toURI().toString());
     FileObject[] dirContents = testDir.getChildren();

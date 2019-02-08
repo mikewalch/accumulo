@@ -37,13 +37,13 @@ public class AccumuloClasspathTest {
   @Test
   public void basic() {
     assertPattern(getClassPath(true), "(?s).*\\s+.*\\n$", true);
-    assertTrue(getClassPath(true).contains("Java System Classloader"));
+    assertTrue(getClassPath(true).contains("Accumulo Classloader"));
     assertTrue(getClassPath(true).contains("Level"));
 
     assertTrue(getClassPath(true).length() > getClassPath(false).length());
 
     assertPattern(getClassPath(false), "(?s).*\\s+.*\\n$", false);
-    assertFalse(getClassPath(false).contains("Java System Classloader"));
+    assertFalse(getClassPath(false).contains("Accumulo Classloader"));
     assertFalse(getClassPath(false).contains("Level"));
   }
 }
