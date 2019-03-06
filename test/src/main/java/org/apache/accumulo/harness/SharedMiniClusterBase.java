@@ -21,13 +21,16 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Properties;
 
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.cluster.ClusterUsers;
+import org.apache.accumulo.core.client.Accumulo;
 import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.KerberosToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.conf.ClientProperty;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.security.TablePermission;
 import org.apache.accumulo.miniclusterImpl.MiniAccumuloClusterImpl;
@@ -108,39 +111,6 @@ public abstract class SharedMiniClusterBase extends AccumuloITBase implements Cl
         System.currentTimeMillis() + "_" + new SecureRandom().nextInt(Short.MAX_VALUE), token,
         miniClusterCallback, krb);
     cluster.start();
-
-    if (krb != null) {
-      final String traceTable = Property.TRACE_TABLE.getDefaultValue();
-      final ClusterUser systemUser = krb.getAccumuloServerUser(), rootUser = krb.getRootUser();
-      // Login as the trace user
-      // Open a client as the system user (ensures the user will exist for us to assign
-      // permissions to)
-      UserGroupInformation.loginUserFromKeytab(systemUser.getPrincipal(),
-          systemUser.getKeytab().getAbsolutePath());
-
-      AuthenticationToken tempToken = new KerberosToken();
-      try (AccumuloClient c = cluster.createAccumuloClient(systemUser.getPrincipal(), tempToken)) {
-        c.securityOperations().authenticateUser(systemUser.getPrincipal(), tempToken);
-      }
-
-      // Then, log back in as the "root" user and do the grant
-      UserGroupInformation.loginUserFromKeytab(rootUser.getPrincipal(),
-          rootUser.getKeytab().getAbsolutePath());
-
-      try (AccumuloClient c = cluster.createAccumuloClient(principal, token)) {
-        // Create the trace table
-        c.tableOperations().create(traceTable);
-        // Trace user (which is the same kerberos principal as the system user, but using a normal
-        // KerberosToken) needs
-        // to have the ability to read, write and alter the trace table
-        c.securityOperations().grantTablePermission(systemUser.getPrincipal(), traceTable,
-            TablePermission.READ);
-        c.securityOperations().grantTablePermission(systemUser.getPrincipal(), traceTable,
-            TablePermission.WRITE);
-        c.securityOperations().grantTablePermission(systemUser.getPrincipal(), traceTable,
-            TablePermission.ALTER_TABLE);
-      }
-    }
   }
 
   /**
@@ -180,7 +150,7 @@ public abstract class SharedMiniClusterBase extends AccumuloITBase implements Cl
   }
 
   public static String getPrincipal() {
-    return principal;
+    return ClientProperty.AUTH_PRINCIPAL.getValue(getClientProps());
   }
 
   public static MiniAccumuloClusterImpl getCluster() {
@@ -191,8 +161,8 @@ public abstract class SharedMiniClusterBase extends AccumuloITBase implements Cl
     return cluster.getConfig().getDir();
   }
 
-  public static AccumuloClient createClient() {
-    return getCluster().createAccumuloClient(principal, getToken());
+  public static Properties getClientProps() {
+    return getCluster().getClientProperties();
   }
 
   public static TestingKdc getKdc() {
